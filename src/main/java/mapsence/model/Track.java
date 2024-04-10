@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 
@@ -25,6 +24,7 @@ public class Track {
     private Date date_stop;
     @ManyToOne
     @JoinColumn(name = "id")
-    private Sensor sensorId;
-    private BigDecimal average_speed;
+    private Sensor sensorId;//на данный момент в бд serial_id, Дима должен переделать
+    //могут появиться доп поля такие как average speed, название трека, длительность и проеденный путь
+    //так же нужна связ с user така же как с sensor
 }

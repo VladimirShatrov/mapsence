@@ -18,8 +18,7 @@ public class Sensor {
     @Column(insertable=false, updatable=false)
     private Long id;
     private int imei;
-    //private int device_id;
     @ManyToOne
     @JoinColumn(name = "id")
-    private User userId;
+    private User user;
 }

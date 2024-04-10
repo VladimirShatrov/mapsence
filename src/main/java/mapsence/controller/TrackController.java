@@ -1,28 +1,22 @@
 package mapsence.controller;
 
 import lombok.RequiredArgsConstructor;
-import mapsence.model.GeoData;
-import mapsence.model.Sensor;
 import mapsence.model.Track;
-import mapsence.repository.GeoDataRepository;
 import mapsence.service.TrackService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/tracks")
+@RequestMapping("/track")
 @RequiredArgsConstructor
 public class TrackController {
     private final TrackService trackService;
-    private final GeoDataRepository geoDataRepository;
 
-    /*@GetMapping("/{id}")
-    public List<GeoData> coordinates(@PathVariable Long id) {
-        Track track = trackService.findTrack(id);
-        Sensor sensor = track.getSensor_id();
-        List<GeoData> geoData = geoDataRepository.findBySensor_id(sensor.getId());
-        return geoData;
-    }*/
+    @GetMapping("/user_track/{user_id}")//вывод всех треков пользователя
+    public List<Track> findByUserId (@PathVariable Long user_id) {
+        return trackService.findByUserId(user_id);
+    }
 
+    //@GetMapping("/coordinates/{track_id}") - вывод всех точек трека
 }

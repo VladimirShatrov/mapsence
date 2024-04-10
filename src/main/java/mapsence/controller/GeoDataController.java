@@ -14,11 +14,6 @@ import java.util.Optional;
 public class GeoDataController {
     private final GeoDataService geoDataService;
 
-    @GetMapping("/track/{id}")
-    public List<GeoData> findDataByTrack(@PathVariable Long id) {
-        return geoDataService.findByTrack(id);
-    }
-
     @GetMapping("/sensor/{id}")
     public List<GeoData> findDataBySensor(@PathVariable Long id) {
         return geoDataService.findBySensor(id);

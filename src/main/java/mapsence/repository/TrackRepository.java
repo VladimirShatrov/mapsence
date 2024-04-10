@@ -9,3 +9,4 @@ import java.util.List;
 public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Track> findBySensorId(Sensor sensor);
 }
+//Если у track появится связь с user - дописать findByUserId
