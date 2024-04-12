@@ -23,8 +23,10 @@ public class Track {
     private Date date_start;
     private Date date_stop;
     @ManyToOne
-    @JoinColumn(name = "id")
-    private Sensor sensorId;//на данный момент в бд serial_id, Дима должен переделать
+    @JoinColumn(name = "sensor_id")
+    private Sensor sensorId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User userId;
     //могут появиться доп поля такие как average speed, название трека, длительность и проеденный путь
-    //так же нужна связ с user така же как с sensor
 }

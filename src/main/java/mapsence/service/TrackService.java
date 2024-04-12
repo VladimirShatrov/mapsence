@@ -26,9 +26,7 @@ public class TrackService {
 
     public List<Track> findByUserId(Long user_id) {
         Optional<User> user = userRepository.findById(user_id);
-        Sensor sensor = sensorRepository.findByUserId(user.orElseThrow(() -> new NoSuchElementException("User not found with id: " + user_id)));
-        return trackRepository.findBySensorId(sensor);
-        // с добавлением связи track с user изменить этот метод
+        return trackRepository.findByUserId(user.orElseThrow(() -> new NoSuchElementException("User not found with id: " + user_id)));
     }
 
     //по мере продвижения добавить создание и удаление трека
