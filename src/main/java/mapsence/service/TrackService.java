@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mapsence.model.Sensor;
 import mapsence.model.Track;
 import mapsence.model.User;
+import mapsence.model.TrackPointInfo;
 import mapsence.repository.SensorRepository;
 import mapsence.repository.TrackRepository;
 import mapsence.repository.UserRepository;
@@ -27,6 +28,10 @@ public class TrackService {
     public List<Track> findByUserId(Long user_id) {
         Optional<User> user = userRepository.findById(user_id);
         return trackRepository.findByUserId(user.orElseThrow(() -> new NoSuchElementException("User not found with id: " + user_id)));
+    }
+
+    public List<TrackPointInfo> getTrackPoints(Long trackId) {
+        return trackRepository.findTrackPointsByTrackId(trackId);
     }
 
     //по мере продвижения добавить создание и удаление трека
