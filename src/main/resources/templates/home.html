@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mapsense</title>
+    <!-- Добавление CSS файла Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Добавление JavaScript файла Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            left: 300px; /* Устанавливаем отступ слева равным ширине меню */
+            top: 0;
+            width: calc(100% - 300px); /* Вычитаем ширину меню из общей ширины */
+            height: 100%;
+        }
+        #trackSelect {
+            font-size: 20px;
+            padding: 10px 10%;
+            padding-left: 50px;
+            background: linear-gradient(to right, #2163ff, #2167ff);
+            color: #black;
+            border: none;
+            cursor: pointer;
+            width: 300px;
+        }
+        .trackButton {
+            display: none; /* Скрываем кнопки по умолчанию */
+        }
+        #trackMenu {
+            position: absolute;
+            left: 0; /* Перемещаем меню влево */
+            top: 0;
+            width: 200px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: white;
+            padding: 10px;
+        }
+        #trackControls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-self: flex-end;
+            height: 150px;
+            width: 250px;
+        }
+        #trackControls button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #addTrackButton {
+            background-color: #75ff30; /* Зеленый */
+            color: white;
+            border: none;
+            border-radius: 80px;
+        }
+        #changeTrackButton {
+            background-color: #ff9129; /* Оранжевый */
+            color: white;
+            border: none;
+            border-radius: 80px;
+        }
+        #deleteTrackButton {
+            background-color: #ff2525; /* Красный */
+            color: white;
+            border: none;
+            border-radius: 80px;
+        }
+        #trackInfo {
+            font-size: 18px; /* Измените значение на желаемый размер шрифта */
+        }
+    </style>
+</head>
+<body onload="initMap();">
+<select id="trackSelect" onchange="loadTrack(this.value)">
+
+</select>
+
+<div id="trackControls">
+    <button id="addTrackButton">Добавить трек</button>
+    <button id="changeTrackButton">Изменить трек</button>
+    <button id="deleteTrackButton">Удалить трек</button>
+</div>
+<!-- Создание контейнера для карты -->
+<div id="map"></div>
+<div id="trackInfo"></div>
+
+<script>
+    let map; // Глобальная переменная для хранения карты
+    let trackLayer; // Глобальная переменная для хранения слоя трека
+    let tracksData = []; // Глобальная переменная для хранения данных о треках
+
+    function initMap() {
+        const center = {lon: 56.183934, lat: 58.007073};
+        map = L.map("map", {closePopupOnClick:false}).setView([center.lat, center.lon], 14);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 18,
+            attribution: "&copy; <a href='https://openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
+        }).addTo(map);
+
+        fetchTracks(true); // Загружаем треки и создаем дополнительные кнопки
+    }
+
+    function fetchTracks(createAdditionalButtons) {
+        const TRACKS_URL = 'http://sersh.keenetic.name:8088/track/user_track/1';
+        fetch(TRACKS_URL)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    tracksData = data; // Сохраняем данные о треках
+                    const trackSelect = document.getElementById('trackSelect');
+                    data.forEach(track => {
+                        const option = document.createElement('option');
+                        option.value = track.id;
+                        option.textContent = `Трек ${track.id}`;
+                        trackSelect.appendChild(option);
+                    });
+                    if (createAdditionalButtons) {
+                        data.forEach(track => {
+                            const button = document.createElement('button');
+                            button.textContent = `Трек ${track.id}`;
+                            button.onclick = function() {
+                                loadTrack(track.id);
+                            };
+                            button.className = 'trackButton'; // Добавляем класс к кнопке
+                            document.body.appendChild(button);
+                        });
+                    }
+                    loadTrack(data[0].id); // Загружаем первый трек по умолчанию
+                }
+            })
+            .catch(e => console.error(e));
+    }
+
+    function loadTrack(trackId) {
+        getCoordinates(trackId);
+
+        const track = tracksData.find(track => track.id === trackId); // Используем tracksData
+        const trackInfoElement = document.getElementById('trackInfo');
+
+        if (track) {
+            // Выводим информацию о каждом треке
+            console.log(`Трек: ${track.id}, Название: ${track.name}, Длина: ${track.length}`);
+            trackInfoElement.innerHTML = `
+                    <h3>Трек ${track.id}:</h3>
+                    <p>Название: ${track.name}</p>
+                    <p>Начало: ${track.date_start}</p>
+					<p>Конец: ${track.date_stop}</p>
+					<p>Длительность: ${track.duration}</p>
+					<p>Скорость: ${track.avgSpeed}</p>
+                `;
+        } else {
+            trackInfoElement.innerHTML = `<p>Трек с ID ${trackId} не найден.</p>`;
+        }
+    }
+
+
+    function getCoordinates(trackId) {
+        const TRACK_COORDINATES_URL = `http://sersh.keenetic.name:8088/track/coordinates/${trackId}`;
+
+        fetch(TRACK_COORDINATES_URL)
+            .then(response => response.json())
+            .then(data => {
+                const trackPoints = data.map(coord => [coord.latitude, coord.longitude]);
+
+                if (map.hasLayer(trackLayer)) {
+                    map.removeLayer(trackLayer);
+                }
+
+                trackLayer = L.polyline(trackPoints, {
+                    color: 'blue',
+                    weight: 10,
+                    lineCap: 'round',
+                    smoothFactor: 3
+                }).addTo(map);
+
+                map.fitBounds(trackPoints);
+            })
+            .catch(e => console.error(e));
+    }
+</script>
+
+</body>
+</html>

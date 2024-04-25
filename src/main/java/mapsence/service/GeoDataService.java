@@ -17,15 +17,7 @@ public class GeoDataService {
     private final GeoDataRepository geoDataRepository;
     private final SensorRepository sensorRepository;
 
-    public List<GeoData> findAll() {
-        return geoDataRepository.findAll();
-    }
-    public List<GeoData> findBySensor (Long id) {
-        Optional<Sensor> sensor = sensorRepository.findById(id);
-        return geoDataRepository.findBySensorId(sensor.orElseThrow(() -> new NoSuchElementException("User not found with id: " + id)));
-    }
-
-    public Optional<GeoData> findById (Long id) {
-        return geoDataRepository.findById(id);
+    public List<GeoData> findBySensorId (Long sensor_id) {
+        return geoDataRepository.findBySensorId(sensor_id);
     }
 }

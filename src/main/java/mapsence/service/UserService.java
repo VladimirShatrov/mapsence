@@ -1,7 +1,6 @@
 package mapsence.service;
 
 import lombok.RequiredArgsConstructor;
-import mapsence.dto.UserEditDTO;
 import mapsence.model.GeoData;
 import mapsence.model.User;
 import mapsence.repository.UserRepository;
@@ -23,14 +22,6 @@ public class UserService {
     public User findUser(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         return optionalUser.orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
-    }
-
-    public User editUser(Long id, UserEditDTO userEditDTO) {
-        User user = userRepository.findById(id).orElseThrow();
-        user.setLogin(userEditDTO.login());
-        user.setPass(userEditDTO.password());
-
-        return userRepository.save(user);
     }
 
     public List<User> findAll() {

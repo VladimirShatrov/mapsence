@@ -17,8 +17,8 @@ public class Sensor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(insertable=false, updatable=false)
     private Long id;
-    private int imei;
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private User user;
+    private String imei;
+
+    @JoinColumn(name = "user_id")
+    private Long userId;
 }

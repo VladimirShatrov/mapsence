@@ -7,6 +7,7 @@ import mapsence.repository.SensorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,5 +17,4 @@ public class SensorService {
     public List<Sensor> findAll() {
         return sensorRepository.findAll();
     }
-    //todo findByUserId
 }

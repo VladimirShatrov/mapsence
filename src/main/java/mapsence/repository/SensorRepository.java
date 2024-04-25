@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface SensorRepository extends JpaRepository<Sensor, Long> {
-    Sensor findByUserId(User user);
+    Sensor findByUserId(Long userId);
 }

@@ -20,9 +20,9 @@ public class GeoData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(insertable=false, updatable=false)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private Sensor sensorId;
+
+    @JoinColumn(name = "sensor_id")
+    private Long sensorId;
     private double latitude;
     private double longitude;
     private double height;

@@ -16,15 +16,6 @@ public class GeoDataController {
 
     @GetMapping("/sensor/{id}")
     public List<GeoData> findDataBySensor(@PathVariable Long id) {
-        return geoDataService.findBySensor(id);
-    }
-
-    @GetMapping("/all")
-    public List<GeoData> findAll() {
-        return geoDataService.findAll();
-    }
-    @GetMapping("/{id}")
-    public Optional<GeoData> findById(@PathVariable Long id) {
-        return geoDataService.findById(id);
+        return geoDataService.findBySensorId(id);
     }
 }
