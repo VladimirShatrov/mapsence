@@ -17,12 +17,12 @@ public class TrackPointInfo {
     @Column(name = "id", insertable = false, updatable = false)
     private Long id;
 
-    @JoinColumn(name = "track_id")
-    private Long trackId;
     private double latitude;
     private double longitude;
     private double height;
 
     @JoinColumn(name = "sensor_id")
     private Long sensorId;
+    @JoinColumn(name = "track_id")
+    private Long trackId;
 }
