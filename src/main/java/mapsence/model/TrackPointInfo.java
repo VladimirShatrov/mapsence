@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -20,6 +22,7 @@ public class TrackPointInfo {
     private double latitude;
     private double longitude;
     private double height;
+    private Date dateTime;
 
     @JoinColumn(name = "sensor_id")
     private Long sensorId;

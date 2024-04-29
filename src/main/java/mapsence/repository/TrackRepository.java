@@ -9,10 +9,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Track> findBySensorId(Long sensorId);
     List<Track> findByUserId(Long userId);
+
+    @Procedure(procedureName = "zxc.prc_delete_track")
+    void prc_delete_track(int id);
+
+    @Procedure(procedureName = "zxc.prc_edit_track")
+    void prc_edit_track(int id, String name);
+
+    @Procedure(procedureName = "zxc.prc_track_action")
+    void prc_track_start(Date dateStart, int sensorId, int userId, String name);
+
+    @Procedure(procedureName = "zxc.prc_track_end")
+    void prc_track_stop(int id, Date dateStop);
 }
