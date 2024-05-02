@@ -15,19 +15,18 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Immutable
-@Table(name = "v_track_info", schema = "zxc")
-public class TrackPointInfo {
+@Table(name = "v_tracks_view", schema = "zxc")
+public class TrackView {
     @Id
     @Column(name = "id", insertable = false, updatable = false)
-    private Long id;
+    private int id;
 
-    private double latitude;
-    private double longitude;
-    private double height;
-    private Date dateTime;
-
-    @JoinColumn(name = "sensor_id")
-    private Long sensorId;
-    @JoinColumn(name = "track_id")
-    private Long trackId;
+    private String name;
+    private Date date_start;
+    private Date date_stop;
+    private int sensorId;
+    private int userId;
+    private float distance;
+    private float avgSpeed;
+    private String duration;
 }

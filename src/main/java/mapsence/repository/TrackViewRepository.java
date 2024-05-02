@@ -1,12 +1,12 @@
 package mapsence.repository;
 
-import mapsence.model.Sensor;
+import mapsence.model.TrackView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SensorRepository extends JpaRepository<Sensor, Long> {
-    Sensor findByUserId(Long userId);
+public interface TrackViewRepository extends JpaRepository<TrackView, Long>{
+    List<TrackView> findByUserId(int id);
 }

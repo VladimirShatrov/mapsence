@@ -1,39 +1,25 @@
 package mapsence.service;
 
 import lombok.RequiredArgsConstructor;
-import mapsence.model.Sensor;
-import mapsence.model.Track;
-import mapsence.model.TrackPointInfo;
-import mapsence.model.User;
-import mapsence.repository.SensorRepository;
-import mapsence.repository.TrackPointInfoRepository;
-import mapsence.repository.TrackRepository;
-import mapsence.repository.UserRepository;
+import mapsence.model.*;
+import mapsence.repository.*;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class TrackService {
     private final TrackRepository trackRepository;
-    private final SensorRepository sensorRepository;
-    private final UserRepository userRepository;
     private final TrackPointInfoRepository trackPointInfoRepository;
+    private final TrackViewRepository trackViewRepository;
 
     public Track findTrack(Long id) {
         return trackRepository.findById(id).orElseThrow();
     }
 
-    public List<Track> findByUserId(Long user_id) {
-        return trackRepository.findByUserId(user_id);
-    }
-
-    public List<Track> findAll() {
-        return trackRepository.findAll();
+    public List<TrackView> findByUserId(int user_id) {
+        return trackViewRepository.findByUserId(user_id);
     }
 
     public List<TrackPointInfo> findPointsByTrack(Long trackId) {
@@ -55,5 +41,4 @@ public class TrackService {
     public void stopTrack(int trackId, Date dateStop) {
         trackRepository.prc_track_stop(trackId, dateStop);
     }
-
 }

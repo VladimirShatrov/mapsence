@@ -139,6 +139,12 @@
                             document.body.appendChild(button);
                         });
                     }
+                    //new
+                    trackSelect.addEventListener('change', function() { // метод который реагирует на изменения
+                        const selectedTrackId = parseInt(this.value); // номер трека
+                        loadTrack(selectedTrackId); // при изменении трека загружаем новые данные
+                    });
+
                     loadTrack(data[0].id); // Загружаем первый трек по умолчанию
                 }
             })
