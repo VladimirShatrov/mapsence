@@ -41,4 +41,8 @@ public class TrackService {
     public void stopTrack(int trackId, Date dateStop) {
         trackRepository.prc_track_stop(trackId, dateStop);
     }
+
+    public void trackComeback(int trackId) {
+        trackRepository.prc_track_comeback(trackId);
+    }
 }

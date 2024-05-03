@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface GeoDataRepository extends JpaRepository<GeoData, Long> {
     List<GeoData> findBySensorId(Long sensorId);
+
+    GeoData findFirstBySensorIdOrderByDateTimeDesc(Long sensorId);
 }

@@ -26,4 +26,9 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
 
     @Procedure(procedureName = "zxc.prc_track_end")
     void prc_track_stop(int id, Date dateStop);
+
+    @Procedure(procedureName = "zxc.prc_track_comeback")
+    void prc_track_comeback(int id);
+
+
 }

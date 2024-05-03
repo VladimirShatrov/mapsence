@@ -57,4 +57,10 @@ public class TrackController {
         Date dateStop = new Date();
         trackService.stopTrack(trackId, dateStop);
     }
+
+    @GetMapping("/comeback/{trackId}")
+    public void trackComeback(@PathVariable int trackId) {
+        trackService.trackComeback(trackId);
+    }
+
 }

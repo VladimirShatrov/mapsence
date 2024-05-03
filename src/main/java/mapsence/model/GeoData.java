@@ -27,7 +27,7 @@ public class GeoData {
     private double longitude;
     private double height;
     private double speed;
-    private Date date_time;
+    private Date dateTime;
     private double course;
     private double battery_voltage;
     private BigDecimal satellite_count;
