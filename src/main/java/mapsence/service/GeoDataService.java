@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GeoDataService {
     private final GeoDataRepository geoDataRepository;
-    private final SensorRepository sensorRepository;
 
     public List<GeoData> findBySensorId (Long sensor_id) {
         return geoDataRepository.findBySensorId(sensor_id);

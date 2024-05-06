@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mapsence.model.GeoData;
 import mapsence.model.Sensor;
 import mapsence.service.SensorService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,8 +19,15 @@ public class SensorController {
         return sensorService.findAll();
     }
 
+    @CrossOrigin
     @GetMapping("/current/{sensorId}")
     public GeoData currentGeoData(@PathVariable Long sensorId) {
         return sensorService.currentGeoDataOfSensor(sensorId);
+    }
+
+    @CrossOrigin
+    @GetMapping("/{userId}")
+    public List<Sensor> findByUserId(@PathVariable Long userId) {
+        return sensorService.findByUserId(userId);
     }
 }

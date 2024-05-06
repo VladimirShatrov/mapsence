@@ -24,4 +24,8 @@ public class SensorService {
     public GeoData currentGeoDataOfSensor(Long sensorId) {
         return geoDataRepository.findFirstBySensorIdOrderByDateTimeDesc(sensorId);
     }
+
+    public List<Sensor> findByUserId(Long userId) {
+        return sensorRepository.findByUserId(userId);
+    }
 }

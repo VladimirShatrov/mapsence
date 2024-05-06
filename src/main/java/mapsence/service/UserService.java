@@ -1,14 +1,10 @@
 package mapsence.service;
 
 import lombok.RequiredArgsConstructor;
-import mapsence.model.GeoData;
 import mapsence.model.User;
 import mapsence.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.List;
 import java.util.NoSuchElementException;
