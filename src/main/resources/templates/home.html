@@ -24,13 +24,13 @@
         }
         #trackSelect {
             font-size: 20px;
-            padding: 10px 10%;
             padding-left: 50px;
             background: linear-gradient(to right, #2163ff, #2167ff);
             color: #black;
             border: none;
             cursor: pointer;
             width: 300px;
+            height: 50px;
         }
         .trackButton {
             display: none; /* Скрываем кнопки по умолчанию */
@@ -53,7 +53,7 @@
             display: flex;
             flex-direction: column;
             justify-self: flex-end;
-            height: 150px;
+            height: 200px;
             width: 250px;
         }
         #trackControls button {
@@ -80,24 +80,117 @@
             border: none;
             border-radius: 80px;
         }
+        #stopTrackButton {
+            background-color: #247cff; /* Красный */
+            color: white;
+            border: none;
+            border-radius: 80px;
+        }
         #trackInfo {
-            font-size: 18px; /* Измените значение на желаемый размер шрифта */
+            font-size: 18px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
+
 <body onload="initMap();">
 <select id="trackSelect" onchange="loadTrack(this.value)">
-
 </select>
+
 
 <div id="trackControls">
     <button id="addTrackButton">Добавить трек</button>
+    <button id="stopTrackButton">Остановить трек</button>
     <button id="changeTrackButton">Изменить трек</button>
     <button id="deleteTrackButton">Удалить трек</button>
 </div>
+
 <!-- Создание контейнера для карты -->
 <div id="map"></div>
 <div id="trackInfo"></div>
+
+<div id="addTrackModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Добавить трек</h2>
+        <form id="addTrackForm">
+            <label for="newTrackName">Введите название трека:</label>
+            <input type="text" id="newTrackName" name="newTrackName" required>
+            <button type="submit">Добавить</button>
+
+        </form>
+    </div>
+</div>
+
+<div id="stopTrackModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Остановить трек</h2>
+        <form id="stopTrackForm">
+            <label for="stopTrackName">Введите номер трека:</label>
+            <input type="number" id="stopTrackName" name="stopTrackName" required>
+            <button type="submit">Остановить</button>
+        </form>
+    </div>
+</div>
+
+<div id="trackModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Изменить трек</h2>
+        <form id="trackForm">
+            <label for="TrackID">Введите номер трека:</label>
+            <input type="number" id="TrackID" name="TrackID" required>
+            <label for="newtrackName">Новое название трека:</label>
+            <input type="text" id="newtrackName" name="newtrackName" required>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+<div id="deleteTrackModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Удалить трек</h2>
+        <form id="deleteTrackForm">
+            <label for="trackToDelete">Введите номер трека:</label>
+            <input type="number" id="trackToDelete" name="trackToDelete" required>
+            <button type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
 
 <script>
     let map; // Глобальная переменная для хранения карты
@@ -115,32 +208,31 @@
         fetchTracks(true); // Загружаем треки и создаем дополнительные кнопки
     }
 
-    function fetchTracks(createAdditionalButtons) {
+    function fetchTracks() {
         const TRACKS_URL = 'http://sersh.keenetic.name:8088/track/user_track/1';
+
         fetch(TRACKS_URL)
             .then(response => response.json())
             .then(data => {
                 if (data && data.length > 0) {
                     tracksData = data; // Сохраняем данные о треках
                     const trackSelect = document.getElementById('trackSelect');
+
                     data.forEach(track => {
                         const option = document.createElement('option');
                         option.value = track.id;
-                        option.textContent = `Трек ${track.id}`;
+                        option.textContent = `${track.name}`;
                         trackSelect.appendChild(option);
+
+                        const button = document.createElement('button');
+                        button.textContent = `Трек ${track.id}`;
+                        button.onclick = function() {
+                            loadTrack(track.id);
+                        };
+                        button.className = 'trackButton'; // Добавляем класс к кнопке
+                        document.body.appendChild(button);
                     });
-                    if (createAdditionalButtons) {
-                        data.forEach(track => {
-                            const button = document.createElement('button');
-                            button.textContent = `Трек ${track.id}`;
-                            button.onclick = function() {
-                                loadTrack(track.id);
-                            };
-                            button.className = 'trackButton'; // Добавляем класс к кнопке
-                            document.body.appendChild(button);
-                        });
-                    }
-                    //new
+
                     trackSelect.addEventListener('change', function() { // метод который реагирует на изменения
                         const selectedTrackId = parseInt(this.value); // номер трека
                         loadTrack(selectedTrackId); // при изменении трека загружаем новые данные
@@ -149,7 +241,7 @@
                     loadTrack(data[0].id); // Загружаем первый трек по умолчанию
                 }
             })
-            .catch(e => console.error(e));
+            .catch(error => console.error(error));
     }
 
     function loadTrack(trackId) {
@@ -167,13 +259,14 @@
                     <p>Начало: ${track.date_start}</p>
 					<p>Конец: ${track.date_stop}</p>
 					<p>Длительность: ${track.duration}</p>
-					<p>Пройденный путь: ${track.distance}</p>
+					<p>Расстояние: ${track.distance}</p>
 					<p>Скорость: ${track.avgSpeed}</p>
                 `;
         } else {
             trackInfoElement.innerHTML = `<p>Трек с ID ${trackId} не найден.</p>`;
         }
     }
+
 
 
     function getCoordinates(trackId) {
@@ -199,7 +292,168 @@
             })
             .catch(e => console.error(e));
     }
-</script>
 
+
+    // Добавить трек
+    document.getElementById('addTrackButton').addEventListener('click', function() {
+        document.getElementById('addTrackModal').style.display = 'block';
+    });
+
+    // Получаем все элементы с классом 'close'
+    var closeButtons = document.getElementsByClassName('close');
+    // Добавляем обработчик событий для каждого элемента
+    for (var i = 0; i < closeButtons.length; i++) {
+        closeButtons[i].addEventListener('click', function() {
+            document.getElementById('addTrackModal').style.display = 'none';
+        });
+    }
+
+    document.getElementById('addTrackModal').addEventListener('click', function(event) {
+        // Проверяем, что клик был сделан не по дочерним элементам модального окна
+        if (event.target == this) {
+            this.style.display = 'none';
+        }
+    });
+
+    document.getElementById('addTrackForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
+        const newTrackName = document.getElementById('newTrackName').value;
+        console.log(newTrackName);
+        document.getElementById('addTrackModal').style.display = 'none';
+
+        const url = `http://sersh.keenetic.name:8088/track/start/1/${newTrackName}/1`;
+
+        // Отправление GET-запроса на сервер
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network Error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+
+
+    // Остановить трек
+    document.getElementById('stopTrackButton').addEventListener('click', function() {
+        document.getElementById('stopTrackModal').style.display = 'block';
+    });
+    document.getElementsByClassName('close')[1].addEventListener('click', function() {
+        document.getElementById('stopTrackModal').style.display = 'none';
+    });
+    document.getElementById('stopTrackModal').addEventListener('click', function(event) {
+        if (event.target == document.getElementById('stopTrackModal')) {
+            document.getElementById('stopTrackModal').style.display = 'none';
+        }
+    });
+    document.getElementById('stopTrackForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
+        const stopTrackName = document.getElementById('stopTrackName').value;
+        console.log(stopTrackName);
+        document.getElementById('stopTrackModal').style.display = 'none';
+
+        const url = `http://sersh.keenetic.name:8088/track/stop/${stopTrackName}`;
+
+        // Отправление GET-запроса на сервер
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network Error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    });
+
+
+    // Изменить трек
+    document.getElementById('changeTrackButton').addEventListener('click', function() {
+        document.getElementById('trackModal').style.display = 'block';
+    });
+    document.getElementsByClassName('close')[0].addEventListener('click', function() {
+        document.getElementById('trackModal').style.display = 'none';
+    });
+    document.getElementById('trackModal').addEventListener('click', function(event) {
+        if (event.target == document.getElementById('trackModal')) {
+            document.getElementById('trackModal').style.display = 'none';
+        }
+    });
+    document.getElementById('trackForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
+        const TrackID = document.getElementById('TrackID').value;
+        const newtrackName = document.getElementById('newtrackName').value;
+        console.log(TrackID);
+        console.log(newtrackName);
+        document.getElementById('trackModal').style.display = 'none';
+
+        const url = `http://sersh.keenetic.name:8088/track/edit/${TrackID}/${newtrackName}`;
+
+        // Отправление GET-запроса на сервер
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network Error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    });
+
+
+    // Удалить трек
+    document.getElementById('deleteTrackButton').addEventListener('click', function() {
+        document.getElementById('deleteTrackModal').style.display = 'block';
+    });
+    document.getElementsByClassName('close')[1].addEventListener('click', function() {
+        document.getElementById('deletetrackModal').style.display = 'none';
+    });
+    document.getElementById('deleteTrackModal').addEventListener('click', function(event) {
+        if (event.target == document.getElementById('deleteTrackModal')) {
+            document.getElementById('deleteTrackModal').style.display = 'none';
+        }
+    });
+    document.getElementById('deleteTrackForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращаем стандартное поведение формы
+        const trackToDelete = document.getElementById('trackToDelete').value;
+        console.log(trackToDelete);
+        document.getElementById('deleteTrackModal').style.display = 'none';
+
+        const url = `http://sersh.keenetic.name:8088/track/delete/${trackToDelete}`;
+
+        // Отправление GET-запроса на сервер
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network Error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    });
+</script>
 </body>
 </html>

@@ -25,6 +25,7 @@ public class TrackPointInfo {
     private double longitude;
     private double height;
     private Date dateTime;
+    private double speed;
 
     @JoinColumn(name = "sensor_id")
     private Long sensorId;

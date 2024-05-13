@@ -1,6 +1,7 @@
 package mapsence.controller;
 
 import lombok.RequiredArgsConstructor;
+import mapsence.dto.TrackDisplay;
 import mapsence.model.Sensor;
 import mapsence.model.Track;
 import mapsence.model.TrackPointInfo;
@@ -22,7 +23,7 @@ public class TrackController {
 
     @CrossOrigin
     @GetMapping("/user_track/{user_id}")
-    public List<TrackView> findByUserId (@PathVariable int user_id) {
+    public List<TrackDisplay> findByUserId (@PathVariable int user_id) {
         return trackService.findByUserId(user_id);
     }
 
