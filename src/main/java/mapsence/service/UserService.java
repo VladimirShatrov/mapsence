@@ -3,6 +3,11 @@ package mapsence.service;
 import lombok.RequiredArgsConstructor;
 import mapsence.model.User;
 import mapsence.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,5 +26,31 @@ public class UserService {
 
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public User create(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Пользователь с таким именем уже существует");
+        }
+
+        return save(user);
+    }
+
+    public User getUserByUsername(String userName) {
+        return userRepository.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользоваетль не найден"));
+    }
+
+    public UserDetailsService userDetailsService() {
+        return this::getUserByUsername;
+    }
+
+    public User getCurrentUser() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getUserByUsername(username);
     }
 }
