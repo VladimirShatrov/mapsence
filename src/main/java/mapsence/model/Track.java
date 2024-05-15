@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Date;
 
 
@@ -20,8 +21,8 @@ public class Track {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable=false, updatable=false)
     private Long id;
-    private Date date_start;
-    private Date date_stop;
+    private Instant date_start;
+    private Instant date_stop;
     private String name;
 
     @JoinColumn(name = "sensor_id")

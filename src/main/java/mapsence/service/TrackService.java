@@ -7,6 +7,7 @@ import mapsence.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -39,6 +40,7 @@ public class TrackService {
             if (view.getDate_start() != null) {
                 Date date_start = view.getDate_start();
                 calendar.setTime(date_start);
+                calendar.add(Calendar.HOUR_OF_DAY, 5);
                 date_start = calendar.getTime();
                 String date_st = simpleDateFormat.format(date_start);
                 trackDisplay.setDate_start(date_st);
@@ -50,6 +52,7 @@ public class TrackService {
             if (view.getDate_stop() != null) {
                 Date date_stop = view.getDate_stop();
                 calendar.setTime(date_stop);
+                calendar.add(Calendar.HOUR_OF_DAY, 5);
                 date_stop = calendar.getTime();
                 String date_finish = simpleDateFormat.format(date_stop);
                 trackDisplay.setDate_stop(date_finish);
@@ -57,6 +60,7 @@ public class TrackService {
             }
             else {
                 trackDisplay.setDate_stop("нет времени конца");
+                displays.add(trackDisplay);
             }
 
         }
@@ -75,11 +79,11 @@ public class TrackService {
         trackRepository.prc_edit_track(trackId, name);
     }
 
-    public void startTrack(Date dateStart, int sensorId, int userId, String name) {
+    public void startTrack(Instant dateStart, int sensorId, int userId, String name) {
         trackRepository.prc_track_start(dateStart, sensorId, userId, name);
     }
 
-    public void stopTrack(int trackId, Date dateStop) {
+    public void stopTrack(int trackId, Instant dateStop) {
         trackRepository.prc_track_stop(trackId, dateStop);
     }
 

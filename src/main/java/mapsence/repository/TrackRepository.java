@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,10 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     void prc_edit_track(int id, String name);
 
     @Procedure(procedureName = "zxc.prc_track_action")
-    void prc_track_start(Date dateStart, int sensorId, int userId, String name);
+    void prc_track_start(Instant dateStart, int sensorId, int userId, String name);
 
     @Procedure(procedureName = "zxc.prc_track_end")
-    void prc_track_stop(int id, Date dateStop);
+    void prc_track_stop(int id, Instant dateStop);
 
     @Procedure(procedureName = "zxc.prc_track_comeback")
     void prc_track_comeback(int id);

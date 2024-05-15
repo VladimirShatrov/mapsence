@@ -12,6 +12,7 @@ import mapsence.service.TrackService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -48,14 +49,14 @@ public class TrackController {
     @CrossOrigin
     @GetMapping("/start/{userId}/{name}/{sensorId}")
     public void startTrack(@PathVariable int userId, @PathVariable int sensorId, @PathVariable String name) {
-        Date dateStart = new Date();
+        Instant dateStart = Instant.now();
         trackService.startTrack(dateStart, sensorId, userId, name);
     }
 
     @CrossOrigin
     @GetMapping("/stop/{trackId}")
     public void stopTrack(@PathVariable int trackId) {
-        Date dateStop = new Date();
+        Instant dateStop = Instant.now();
         trackService.stopTrack(trackId, dateStop);
     }
 
