@@ -36,6 +36,51 @@
             cursor: pointer;
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    let username = document.getElementById('username').value;
+                    let password = document.getElementById('password').value;
+                    let data = {
+                        username: username,
+                        password: password
+                    };
+
+                    let jsonData = JSON.stringify(data);
+
+                    fetch('http://sersh.keenetic.name:8088/auth/sign-in', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': '*/*'
+                        },
+                        body: jsonData
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Сетевой ответ не был успешным');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Успешный ответ:', data);
+
+                            let jwtToken = data.token;
+                            localStorage.setItem('jwtToken', jwtToken);
+
+                            window.location.href = 'http://sersh.keenetic.name:8088/?token=' + jwtToken;
+                        })
+                        .catch(error => {
+                            console.error('Ошибка:', error);
+                        });
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 <form>
