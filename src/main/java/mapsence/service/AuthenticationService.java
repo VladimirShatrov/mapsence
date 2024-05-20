@@ -19,6 +19,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
         var user  = User.builder()
                 .username(request.getUsername())
                 .pass(request.getPassword())

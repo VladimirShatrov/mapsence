@@ -7,11 +7,7 @@ import mapsence.dto.JwtAuthenticationResponse;
 import mapsence.dto.SignInRequest;
 import mapsence.dto.SignUpRequest;
 import mapsence.service.AuthenticationService;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,20 +25,5 @@ public class AuthorizationController {
     @PostMapping("/sign-in")
     public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request) {
         return authenticationService.signIn(request);
-    }
-
-    @PostMapping("/register")
-    public String register(Model model) {
-        return "register";
-    }
-
-    @PostMapping("/login")
-    public String login(Model model) {
-        return "login";
-    }
-
-    @PostMapping("/")
-    public String auth(Model model) {
-        return "auth";
     }
 }

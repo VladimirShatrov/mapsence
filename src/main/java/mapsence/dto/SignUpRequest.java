@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class SignUpRequest {
 
     @Schema(description = "Имя пользователя", example = "Jon")
-    @Size(min = 5, max = 50, message = "Имя пользователя должно содержать от 5 до 50 символов")
+    @Size(min = 1, max = 50, message = "Имя пользователя должно содержать от 5 до 50 символов")
     @NotBlank(message = "Имя пользователя не может быть пустыми")
     private String username;
 
