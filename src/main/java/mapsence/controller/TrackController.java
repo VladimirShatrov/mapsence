@@ -2,18 +2,11 @@ package mapsence.controller;
 
 import lombok.RequiredArgsConstructor;
 import mapsence.dto.TrackDisplay;
-import mapsence.model.Sensor;
-import mapsence.model.Track;
 import mapsence.model.TrackPointInfo;
-import mapsence.model.TrackView;
-import mapsence.repository.SensorRepository;
-import mapsence.service.SensorService;
 import mapsence.service.TrackService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController

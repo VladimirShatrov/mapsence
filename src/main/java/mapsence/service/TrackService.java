@@ -2,13 +2,20 @@ package mapsence.service;
 
 import lombok.RequiredArgsConstructor;
 import mapsence.dto.TrackDisplay;
-import mapsence.model.*;
-import mapsence.repository.*;
+import mapsence.model.Track;
+import mapsence.model.TrackPointInfo;
+import mapsence.model.TrackView;
+import mapsence.repository.TrackPointInfoRepository;
+import mapsence.repository.TrackRepository;
+import mapsence.repository.TrackViewRepository;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
