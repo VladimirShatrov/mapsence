@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <!-- Добавление JavaScript файла Leaflet -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.0.0/build/jwt-decode.min.js"></script>
     <style>
         html, body, #map {
             height: 100%;
@@ -197,6 +199,9 @@
     let trackLayer; // Глобальная переменная для хранения слоя трека
     let tracksData = []; // Глобальная переменная для хранения данных о треках
 
+    const userId = jwt_decode(localStorage.getItem('jwtToken')).id;
+    console.log(userId);
+
     function initMap() {
         const center = {lon: 56.183934, lat: 58.007073};
         map = L.map("map", {closePopupOnClick:false}).setView([center.lat, center.lon], 14);
@@ -205,11 +210,11 @@
             attribution: "&copy; <a href='https://openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
         }).addTo(map);
 
-        fetchTracks(true); // Загружаем треки и создаем дополнительные кнопки
+        fetchTracks(); // Загружаем треки и создаем дополнительные кнопки
     }
 
     function fetchTracks() {
-        const TRACKS_URL = 'http://sersh.keenetic.name:8088/track/user_track/1';
+        const TRACKS_URL = `http://sersh.keenetic.name:8088/track/user_track/${userId}`;
 
         fetch(TRACKS_URL)
             .then(response => response.json())
@@ -321,7 +326,7 @@
         console.log(newTrackName);
         document.getElementById('addTrackModal').style.display = 'none';
 
-        const url = `http://sersh.keenetic.name:8088/track/start/1/${newTrackName}/1`;
+        const url = `http://sersh.keenetic.name:8088/track/start/${userId}/${newTrackName}/1`;
 
         // Отправление GET-запроса на сервер
         fetch(url)

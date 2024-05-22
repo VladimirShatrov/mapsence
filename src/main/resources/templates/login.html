@@ -73,23 +73,8 @@
                             let jwtToken = data.token;
                             localStorage.setItem('jwtToken', jwtToken);
 
+                            window.location.href = 'http://sersh.keenetic.name:8088/' + jwtToken;
 
-                            // fetch('http://sersh.keenetic.name:8088/', {
-                            //     method: 'GET',
-                            //     headers: {
-                            //         'Authorization': 'Bearer ' + jwtToken
-                            //     }
-                            // })
-                            //     .then(response => {
-                            //         if (!response.ok) {
-                            //             throw new Error('Сетевой ответ не был успешным');
-                            //         }
-                            //         console.log(response);
-                            //         window.location.href = 'http://sersh.keenetic.name:8088/?token=' + jwtToken;
-                            //     })
-                            //     .catch(error => {
-                            //         console.error('Ошибка:', error);
-                            //     });
                         })
                         .catch(error => {
                             console.error('Ошибка:', error);

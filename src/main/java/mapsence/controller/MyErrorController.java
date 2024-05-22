@@ -21,6 +21,10 @@ public class MyErrorController implements ErrorController {
             if (statusCode == HttpStatus.FORBIDDEN.value()) {
                 errorPage = "auth";
             }
+
+            if (statusCode == HttpStatus.NOT_FOUND.value()) {
+                errorPage = "404Error";
+            }
         }
 
         return errorPage;
